@@ -1,6 +1,6 @@
 // Importa as funções necessárias do Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, 
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, 
     signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -15,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
+const _app = initializeApp(firebaseConfig);
 const auth = getAuth(); //configura o firebase authentication
 const provider = new GoogleAuthProvider();
 
@@ -25,7 +25,7 @@ function showMessage(message, divId) {
     messageDiv.style.display = "block";
     messageDiv.innerHTML = message;
     messageDiv.style.opacity = 1;
-    setTimeout(function() {
+    setTimeout(() => {
         messageDiv.style.opacity = 0;
     }, 5000); // A mensagem desaparece após 5 segundos
 }
@@ -64,7 +64,7 @@ signUp.addEventListener('click', (event) => {
     })
     .catch((error) => {
         const errorCode = error.code;
-        if (errorCode == 'auth/email-already-in-use') {
+        if (errorCode === 'auth/email-already-in-use') {
             showMessage('Endereço de email já existe', 'signUpMessage');
         } else {
             showMessage('não é possível criar usuário', 'signUpMessage');
@@ -85,7 +85,7 @@ signIn.addEventListener('click', (event) => {
     // Realiza o login com e-mail e senha
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-        showMessage('usuário logado com sucesso', 'signInMessage'); // Exibe mensagem de sucesso
+        // showMessage('usuário logado com sucesso', 'signInMessage'); // Exibe mensagem de sucesso
         const user = userCredential.user;
 
         // Salva o ID do usuário no localStorage
@@ -103,30 +103,18 @@ signIn.addEventListener('click', (event) => {
     });
 });
 
-const googleLogIn = document.getElementById('google-logIn')
-googleLogIn.addEventListener('click', () => {
-    signInWithPopup(auth, provider)
+const googleLogIn = document.getElementsByClassName('fab fa-google');
+[...googleLogIn].map(item => {
+    item.addEventListener('click', () => {
+        signInWithPopup(auth, provider)
         .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            // const credential = GoogleAuthProvider.credentialFromResult(result);
-            // const token = credential.accessToken;
-            // The signed-in user info.
             const user = result.user;
-
             localStorage.setItem('loggedInUserId', user.uid);
-            // console.log(result)
-
             window.location.href = 'homepage.html'; // Redireciona para a página inicial
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
-        }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
-        });
+        })
+        .catch(() => {
+            showMessage('Erro ao validar login com Google', 'signInMessage');
+            showMessage('Erro ao validar login com Google', 'signUpMessage');
+        })
+    })
 })

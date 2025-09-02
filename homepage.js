@@ -32,14 +32,23 @@ onAuthStateChanged(auth, (user) => {
         .then((docSnap) => {
             //se o documento existir, exibe os dados na interface
             if (docSnap.exists()) {
+
+                if (!user.photoURL) {
+                    const audio = new Audio("b.mp3");
+
+                    audio.play()
+                }
+
+                const imgSafe = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpRf4XytVUgVb4Xwg6PaS7tyMTgo0cM1yw7Mu1BxiBdk5kfTwl5tFBGaYXmyjQTiMUlH8&usqp=CAU'
                 
                 const userData = docSnap.data();
                 // console.log(userData)
+                document.getElementById('welcomeName').innerText += ` ${userData.firstName.replace(' ', '')}!`;
                 document.getElementById('loggedUserFName').innerText = userData.firstName;
                 document.getElementById('loggedUserEmail').innerText = userData.email;
                 document.getElementById('loggedUserLName').innerText = userData.lastName;
-                document.getElementById('loggedUserDisplayName').innerText = user.displayName
-                document.getElementById('loggedUserPhoto').setAttribute('src', user.photoURL)
+                document.getElementById('loggedUserDisplayName').innerText = user.displayName ?? userData.firstName.replace(' ', '');
+                document.getElementById('loggedUserPhoto').setAttribute('src', user.photoURL ?? imgSafe)
             } else {
                 console.log("ID não encontrado no Documento");
             }
