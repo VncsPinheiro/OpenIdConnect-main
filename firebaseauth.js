@@ -6,12 +6,12 @@ import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12
 
 // Configurações do Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyD2IPPdvRImnryfhI-xTquQmPcRaeQ-sdI",
-  authDomain: "openidconnect-eb83c.firebaseapp.com",
-  projectId: "openidconnect-eb83c",
-  storageBucket: "openidconnect-eb83c.firebasestorage.app",
-  messagingSenderId: "497617093011",
-  appId: "1:497617093011:web:42a351283f8f371a132866"
+	apiKey: "AIzaSyD2IPPdvRImnryfhI-xTquQmPcRaeQ-sdI",
+	authDomain: "openidconnect-eb83c.firebaseapp.com",
+	projectId: "openidconnect-eb83c",
+	storageBucket: "openidconnect-eb83c.firebasestorage.app",
+	messagingSenderId: "497617093011",
+	appId: "1:497617093011:web:42a351283f8f371a132866",
 };
 
 // Inicializa o Firebase
@@ -50,7 +50,7 @@ signUp.addEventListener('click', (event) => {
         const user = userCredential.user; // Usuário autenticado
         const userData = { email, firstName, lastName }; // Dados do usuário para salvar
 
-        showMessage('Conta criada com sucesso', 'signUpMessage'); // Exibe mensagem de sucesso
+        // showMessage('Conta criada com sucesso', 'signUpMessage'); // Exibe mensagem de sucesso
 
         // Salva os dados do usuário no Firestore
         const docRef = doc(db, "users", user.uid);
